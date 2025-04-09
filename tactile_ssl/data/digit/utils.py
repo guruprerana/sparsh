@@ -222,3 +222,42 @@ def load_textile_dataset(config, dataset_name):
     with open(path_metadata, "r") as file:
         metadata = file.read()
     return data, metadata
+
+# to load port dataset
+def load_port_dataset(config, dataset_name):
+    """Load images from a dataset folder where subfolders are class labels.
+    Args:
+        config: Config object containing path_dataset
+        dataset_name: Name of the dataset folder (e.g. 'objects')
+    Returns:
+        data: Dictionary with 'images' and 'labels' lists
+        metadata: String containing class names and their indices
+    """
+    path_data = os.path.join(config.path_dataset, dataset_name)
+    data = {'images': [], 'labels': []}
+    
+    # Get all class folders
+    class_names = sorted([d for d in os.listdir(path_data) 
+                         if os.path.isdir(os.path.join(path_data, d))])
+    class_to_idx = {cls_name: i for i, cls_name in enumerate(class_names)}
+    
+    # Collect all images and their labels
+    for class_name in class_names:
+        class_dir = os.path.join(path_data, class_name)
+        if not os.path.isdir(class_dir):
+            continue
+            
+        for img_name in os.listdir(class_dir):
+            if img_name.endswith('.png'):
+                img_path = os.path.join(class_dir, img_name)
+                # Store the full path and corresponding label
+                data['images'].append(img_path)
+                data['labels'].append(class_to_idx[class_name])
+    
+    # Create metadata string
+    metadata = "Class names and their indices:\n"
+    metadata += "\n".join([f"{idx}: {name}" for name, idx in class_to_idx.items()])
+    
+    return data, metadata
+
+
