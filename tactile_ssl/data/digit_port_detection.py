@@ -59,6 +59,8 @@ class PortDataset(data.Dataset):
             # Apply transforms to convert to tensor
             if self.transform_resize:
                 image = self.transform_resize(image)  
+
+            image = torch.cat([image, image], dim=0)
                 
             inputs = {
                 "image": image,

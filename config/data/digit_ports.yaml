@@ -29,7 +29,7 @@ dataset:
 
     class_labels: ["ac_adapter", "BNC", "hdmi_cable", "hdmi_port", "usb_cable", "usb_port"]
 
-    weights_classes: [1, 1, 1, 1, 1, 1]
+    weights_classes: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
 
 train_dataloader:
   batch_size: 20
