@@ -175,6 +175,8 @@ def get_dataloaders(cfg: DictConfig):
 
 
 def attempt_resume(cfg: DictConfig):
+    return False, cfg
+
     ckpt_path = None
     if os.path.exists(f"{cfg.paths.output_dir}/config.yaml") and cfg.resume_id:
         job_id = HydraConfig.get().job.id

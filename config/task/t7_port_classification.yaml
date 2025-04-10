@@ -59,7 +59,7 @@ task:
     embed_dim: ${ssl_model_size}
     num_heads: 12
     depth: 1
-    num_classes: 20
+    num_classes: 6
 
   checkpoint_encoder: ${paths.encoder_checkpoint_root}/${ssl_name}_vit${ssl_model_size}.ckpt
   train_encoder: false
