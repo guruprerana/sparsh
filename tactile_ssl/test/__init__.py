@@ -9,3 +9,4 @@ from .test_t3_pose import TestPoseSL  # noqa: F401
 from .test_t4_grasp import TestGraspSL  # noqa: F401
 from .test_t6_textile import TestTextileSL  # noqa: F401
 from .demo_t1_forcefield import DemoForceField  # noqa: F401
+from .test_t7_port_classification import TestPortClassificationSL

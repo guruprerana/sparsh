@@ -12,3 +12,4 @@ from .slip_decoders import SlipProbe, SlipForceProbe  # noqa F401
 from .pose_sl import PoseLinearProbe, PoseSLModule  # noqa F401
 from .grasp_sl import GraspLinearProbe, GraspSLModule  # noqa F401
 from .textile_sl import TextileLinearProbe, TextileSLModule  # noqa F401
+from .port_classification import PortLinearProbe, PortClassificationModule

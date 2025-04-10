@@ -1,0 +1,47 @@
+train_val_split: ~
+train_data_budget: 1.0
+val_data_budget: 1.0
+max_train_data: 100000
+sensor: digit
+
+dataset:
+  _target_: tactile_ssl.data.digit_port_detection.PortDataset
+  config:
+    sensor: ${data.sensor}
+    remove_bg: false
+    out_format: "single_image" # ["video", "concat_ch_img"  "single_image"]
+
+    path_dataset: ${paths.data_root}/
+
+    list_datasets: [
+      objects
+    ]
+
+    list_datasets_test: [
+      objects
+    ]
+    
+    look_in_folder: false
+    max_files_per_folder: -1 #-1 for all files
+
+    transforms:
+      resize: [320, 240]
+
+    class_labels: ["ac_adapter", "BNC", "hdmi_cable", "hdmi_port", "usb_cable", "usb_port"]
+
+    weights_classes: [1, 1, 1, 1, 1, 1]
+
+train_dataloader:
+  batch_size: 20
+  num_workers: 8
+  drop_last: True
+  pin_memory: True
+  persistent_workers: True
+  shuffle: True
+
+val_dataloader:
+  batch_size: 20
+  num_workers: 8
+  drop_last: True
+  pin_memory: True
+  persistent_workers: True
