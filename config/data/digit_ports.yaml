@@ -14,11 +14,13 @@ dataset:
     path_dataset: ${paths.data_root}/
 
     list_datasets: [
-      objects
+      # objects
+      ports/train
     ]
 
     list_datasets_test: [
-      objects
+      # objects
+      ports/test
     ]
     
     look_in_folder: false
@@ -27,12 +29,12 @@ dataset:
     transforms:
       resize: [320, 240]
 
-    class_labels: ["ac_adapter", "BNC", "hdmi_cable", "hdmi_port", "usb_cable", "usb_port"]
+    class_labels: ["BNC", "hdmi_cable", "hdmi_port", "usb_cable", "usb_port"]
 
-    weights_classes: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+    weights_classes: [1.0, 1.0, 1.0, 1.0, 1.0]
 
 train_dataloader:
-  batch_size: 20
+  batch_size: 5
   num_workers: 8
   drop_last: True
   pin_memory: True
@@ -40,7 +42,7 @@ train_dataloader:
   shuffle: True
 
 val_dataloader:
-  batch_size: 20
+  batch_size: 5
   num_workers: 8
   drop_last: True
   pin_memory: True

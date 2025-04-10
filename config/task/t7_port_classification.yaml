@@ -3,7 +3,7 @@
 task_name: t7_port
 ssl_model_size: base
 train_data_budget: 1.0
-val_data_budget: 0.5
+val_data_budget: 1.0
 experiment_name: ${sensor}_${task_name}_${ssl_name}_vit${ssl_model_size}_${train_data_budget}
 seed: 42
 
@@ -19,7 +19,7 @@ wandb:
   tags: ["${ssl_name}"]
 
 trainer:
-  max_epochs: 5
+  max_epochs: 40
   validation_frequency: 5
   sanity_validate: true
   save_checkpoint_dir: ${paths.output_dir}/checkpoints
@@ -34,10 +34,11 @@ data:
 test:
   data:
     dataset_name: [
-      objects,
+      # objects,
+      ports/test
     ]
     look_in_folder: false
-    batch_size: 20
+    batch_size: 5
   tester:
     _partial_: True
     _target_: tactile_ssl.test.TestPortClassificationSL
@@ -59,7 +60,7 @@ task:
     embed_dim: ${ssl_model_size}
     num_heads: 12
     depth: 1
-    num_classes: 6
+    num_classes: 5
 
   checkpoint_encoder: ${paths.encoder_checkpoint_root}/${ssl_name}_vit${ssl_model_size}.ckpt
   train_encoder: false

@@ -219,6 +219,11 @@ def train(cfg: DictConfig):
         wandb.config.update(OmegaConf.to_container(cfg, resolve=True))
         OmegaConf.save(cfg, f"{cfg.paths.output_dir}/config.yaml")
 
+    try:
+        os.mkdir(f"{cfg.paths.output_dir}/checkpoints")
+    except:
+        pass
+
     print_config_tree(cfg, resolve=True, save_to_file=True)
     if cfg.get("seed"):
         seed_everything(cfg.seed, workers=True)

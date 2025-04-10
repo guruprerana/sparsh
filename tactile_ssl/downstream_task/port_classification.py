@@ -98,7 +98,7 @@ class PortClassificationModule(SLModule):
         self.val_batches = []
         self.n_classes = model_task.num_classes
         self.weights_classes = torch.tensor([1.0]*self.n_classes) if weights_classes is None else torch.tensor(weights_classes)
-        self.class_labels = ["BNC", "ac_adapter", "hdmi_cable", "hdmi_port", "usb_cable", "usb_port"] if class_labels is None else class_labels
+        self.class_labels = ["BNC", "hdmi_cable", "hdmi_port", "usb_cable", "usb_port"] if class_labels is None else class_labels
         assert self.n_classes == len(self.class_labels) == len(self.weights_classes)
 
     def forward(self, x: torch.Tensor):
