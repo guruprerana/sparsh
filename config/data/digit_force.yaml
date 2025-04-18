@@ -13,7 +13,7 @@ dataset:
     num_frames: 2 # num frames in input (for video and concat_ch_img format)
     frame_stride: 5  # temporal stride between frames in input 
 
-    path_dataset: ${paths.data_root}/tacbench_data/T1_force/digit/
+    path_dataset: ${paths.data_root}/digit-force-estimation/
     list_datasets: [
       "sphere/batch_1",
       "sharp/batch_1",
