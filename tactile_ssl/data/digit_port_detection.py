@@ -16,6 +16,10 @@ import torchvision.transforms.functional as TF
 from torchvision import transforms
 from scipy.spatial.transform import Rotation as R
 
+from tactile_ssl.utils.logging import get_pylogger
+
+logger = get_pylogger(__name__)
+
 DEBUG = False
 
 class PortDataset(data.Dataset):
@@ -31,10 +35,18 @@ class PortDataset(data.Dataset):
         
         # Set up image transforms
         self.img_sz = self.config.transforms.resize
-        self.transform_resize = transforms.Compose([
-            transforms.Resize(self.img_sz),
-            transforms.ToTensor(),
-        ])
+        if "20140" not in dataset_name:
+            # data augmentation for training
+            self.transform_resize = transforms.Compose([
+                transforms.Resize(self.img_sz),
+                transforms.RandomRotation(90),
+                transforms.ToTensor(),
+            ])
+        else:
+            self.transform_resize = transforms.Compose([
+                transforms.Resize(self.img_sz),
+                transforms.ToTensor(),
+            ])
 
     def __len__(self):
         return self.n_samples

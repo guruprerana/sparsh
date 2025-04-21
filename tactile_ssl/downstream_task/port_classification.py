@@ -29,6 +29,29 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 log = get_pylogger(__name__)
 
 
+classes = [
+      "book",
+      "book_spine",
+      "cardboard",
+      "clear_glass",
+      "green_sponge",
+      "hdmi_cable",
+      "hdmi_port",
+      "laptop_bag",
+      "laptop_bag_strap",
+      "painted_glass",
+      "smiley_sponge",
+      "sponge",
+      "styrofoam",
+      "tape",
+      "tennis_ball",
+      "tissue",
+      "usb_cable",
+      "usb_port",
+      "wood_double"
+    ]
+
+
 class PortLinearProbe(nn.Module):
     def __init__(
         self,
@@ -40,7 +63,7 @@ class PortLinearProbe(nn.Module):
         init_std=0.02,
         qkv_bias=True,
         complete_block=True,
-        num_classes=6,  # Default for BNC, HDMI port, HDMI cable, USB port, USB cable, AC adapter
+        num_classes=19,
     ):
         super().__init__()
 
@@ -66,6 +89,7 @@ class PortLinearProbe(nn.Module):
 
     def forward(self, x):
         x = self.pooler(x).squeeze(1)
+        # x = torch.mean(x, dim=1)
         x = self.probe(x)
         return x
 
@@ -98,7 +122,7 @@ class PortClassificationModule(SLModule):
         self.val_batches = []
         self.n_classes = model_task.num_classes
         self.weights_classes = torch.tensor([1.0]*self.n_classes) if weights_classes is None else torch.tensor(weights_classes)
-        self.class_labels = ["BNC", "hdmi_cable", "hdmi_port", "usb_cable", "usb_port"] if class_labels is None else class_labels
+        self.class_labels = classes if class_labels is None else class_labels
         assert self.n_classes == len(self.class_labels) == len(self.weights_classes)
 
     def forward(self, x: torch.Tensor):
@@ -125,8 +149,11 @@ class PortClassificationModule(SLModule):
         pred_labels_chance = np.random.choice(self.n_classes, size=y_gt_np.shape[0])
         accuracy = accuracy_score(y_gt_np, y_pred_labels)
         accuracy_chance = accuracy_score(y_gt_np, pred_labels_chance)
+        
+        # Calculate top_k_accuracy using all classes
+        # We use range(self.n_classes) to ensure we're using all possible classes
         top_k_accuracy = top_k_accuracy_score(
-                y_gt_np, y_pred_np, k=2, labels=range(self.n_classes)  # Changed k from 3 to 2 since we have fewer classes
+                y_gt_np, y_pred_np, k=min(3, self.n_classes), labels=range(self.n_classes)
             )
         balanced_accuracy = balanced_accuracy_score(y_gt_np, y_pred_labels)
         return {
@@ -181,6 +208,17 @@ class PortClassificationModule(SLModule):
             .numpy()
         )
         port_pred = port_pred.argmax(axis=1)
+
+        # Calculate overall metrics
+        overall_accuracy = accuracy_score(port_gt, port_pred)
+        overall_balanced_accuracy = balanced_accuracy_score(port_gt, port_pred)
+        
+        # Log overall metrics
+        if trainer_instance is not None:
+            trainer_instance.wandb.log({
+                "val/overall_accuracy": overall_accuracy,
+                "val/overall_balanced_accuracy": overall_balanced_accuracy,
+            })
 
         cm = confusion_matrix(port_gt, port_pred, normalize="true", labels=range(self.n_classes))
         disp = ConfusionMatrixDisplay(

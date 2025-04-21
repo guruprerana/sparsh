@@ -14,13 +14,13 @@ dataset:
     path_dataset: ${paths.data_root}/
 
     list_datasets: [
-      # objects
-      ports/train
+      objects
+      # ports/train
     ]
 
     list_datasets_test: [
-      # objects
-      ports/test
+      objects_20140
+      # ports/test
     ]
     
     look_in_folder: false
@@ -29,9 +29,30 @@ dataset:
     transforms:
       resize: [320, 240]
 
-    class_labels: ["BNC", "hdmi_cable", "hdmi_port", "usb_cable", "usb_port"]
+    class_labels: [
+      "book",
+      "book_spine",
+      "cardboard",
+      "clear_glass",
+      "green_sponge",
+      "hdmi_cable",
+      "hdmi_port",
+      "laptop_bag",
+      "laptop_bag_strap",
+      "painted_glass",
+      "smiley_sponge",
+      "sponge",
+      "styrofoam",
+      "tape",
+      "tennis_ball",
+      "tissue",
+      "usb_cable",
+      "usb_port",
+      "wood_double"
+    ]
 
-    weights_classes: [1.0, 1.0, 1.0, 1.0, 1.0]
+    weights_classes: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+      1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
 
 train_dataloader:
   batch_size: 5
